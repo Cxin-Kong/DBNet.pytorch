@@ -25,6 +25,7 @@ class EVAL():
             torch.backends.cudnn.benchmark = True
         else:
             self.device = torch.device("cpu")
+        print('load model:',model_path)
         checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
         config = checkpoint['config']
         config['arch']['backbone']['pretrained'] = False
@@ -53,7 +54,10 @@ class EVAL():
                             batch[key] = value.to(self.device)
                 start = time.time()
                 preds = self.model(batch['img'])
-                boxes, scores = self.post_process(batch, preds,is_output_polygon=self.metric_cls.is_output_polygon)
+                print(batch['img'].size())
+                # print(preds)
+                # exit()
+                boxes, scores = self.post_process(batch, preds, is_output_polygon=self.metric_cls.is_output_polygon)
                 total_frame += batch['img'].size()[0]
                 total_time += time.time() - start
                 raw_metric = self.metric_cls.validate_measure(batch, (boxes, scores))
@@ -65,7 +69,7 @@ class EVAL():
 
 def init_args():
     parser = argparse.ArgumentParser(description='DBNet.pytorch')
-    parser.add_argument('--model_path', required=False,default='output/DBNet_resnet18_FPN_DBHead/checkpoint/1.pth', type=str)
+    parser.add_argument('--model_path', required=False,default='output/DBNet_resnet18_FPN_DBHead/checkpoint/model_best.pth', type=str)
     args = parser.parse_args()
     return args
 

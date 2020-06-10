@@ -111,7 +111,7 @@ def init_args():
     parser.add_argument('--model_path', default='model_best.pth', type=str)
     parser.add_argument('--input_folder', default='./test/input', type=str, help='img path for predict')
     parser.add_argument('--output_folder', default='./test/output', type=str, help='img path for output')
-    parser.add_argument('--thre', default=0.3, help='the thresh of post_processing')
+    parser.add_argument('--thre', default=0.3, type=float, help='the thresh of post_processing')
     parser.add_argument('--polygon', action='store_true', help='output polygon or box')
     parser.add_argument('--show', action='store_true', help='show result')
     parser.add_argument('--save_resut', action='store_true', help='save box and score to txt file')

@@ -44,7 +44,10 @@ class QuadMetric():
         ignore_tags_batch = batch['ignore_tags']
         pred_polygons_batch = np.array(output[0])
         pred_scores_batch = np.array(output[1])
+        # print(batch['img'].shape)
+
         for polygons, pred_polygons, pred_scores, ignore_tags in zip(gt_polyons_batch, pred_polygons_batch, pred_scores_batch, ignore_tags_batch):
+            # print(polygons[0], pred_polygons[0], pred_scores[0])
             gt = [dict(points=np.int64(polygons[i]), ignore=ignore_tags[i]) for i in range(len(polygons))]
             if self.is_output_polygon:
                 pred = [dict(points=pred_polygons[i]) for i in range(len(pred_polygons))]

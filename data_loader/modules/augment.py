@@ -218,21 +218,25 @@ class ResizeShortSize:
 
         h, w, _ = im.shape
         short_edge = min(h, w)
-        if short_edge < self.short_size:
+        if short_edge <= self.short_size:
             # 保证短边 >= short_size
-            scale = self.short_size / short_edge
-            scale = (scale, scale)
-            im = cv2.resize(im, dsize=None, fx=scale, fy=scale)
-            # im, scale = resize_image(im, self.short_size)
-            if self.resize_text_polys:
+            # scale = self.short_size / short_edge
+            # scale = (scale, scale)
+            # im = cv2.resize(im, dsize=None, fx=scale, fy=scale)
+            im, scale = resize_image(im, self.short_size)
+            text_polys = np.array(text_polys)
+            # print('==before scale text_polys==', text_polys)
+            # print('==text_polys.shape:', text_polys.shape)
+            # print('==im.shape==:', im.shape)
+            # print('==scale==:', scale)
+            # if self.resize_text_polys:
                 # text_polys *= scale
-                text_polys[:, 0] *= scale[0]
-                text_polys[:, 1] *= scale[1]
-
+            text_polys[..., 0] *= scale[0]
+            text_polys[..., 1] *= scale[1]
+            # print('==after scale text_polys==', text_polys)
         data['img'] = im
         data['text_polys'] = text_polys
         return data
-
 
 class HorizontalFlip:
     def __init__(self, random_rate):
